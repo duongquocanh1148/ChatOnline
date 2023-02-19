@@ -79,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
           };
 
           // ignore: avoid_single_cascade_in_expression_statements
-          FirebaseFirestore.instance.collection('users')..doc(map['userID']).set(map).then((value){
+          FirebaseFirestore.instance.collection('users').doc(map['userID']).set(map).then((value){
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text("Register successfully"),
               behavior: SnackBarBehavior.floating,
@@ -106,16 +106,28 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.blue,
-    ));
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(
+            color: Colors.blue
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.fromLTRB(16.0, 64.0, 16.0, 64.0),
+          margin: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 32.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Center(
+              child: Text(
+                "Register",
+                style: TextStyle(
+                  color: Colors.blue, fontSize: 36, fontWeight: FontWeight.bold,
+                ),
+              ),),
+              const SizedBox(height: 28,),
               Center(
                 child: GestureDetector(
                   onTap: (){
