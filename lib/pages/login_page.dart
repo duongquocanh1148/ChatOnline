@@ -36,20 +36,20 @@ class _LoginPageState extends State<LoginPage> {
             content: Text("Sign in successfully"),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.green,));
-             /*Navigator.of(context).pushAndRemoveUntil(
+            Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => const NavigationPage()),
-                (route) => false);   */ 
+                (route) => false);
         });        
-        // ignore: unused_catch_clause
-        } on FirebaseAuthException catch (e){
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Log in successfully"),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.red,));
-        }
+        } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.message.toString()),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ));
       }
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +73,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 32,),
             TextField(
+              controller: emailController,
               style: const TextStyle(fontSize: 16),
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
@@ -99,10 +100,10 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 16,),
             TextField(
               controller: passwordController,
+              obscureText: !show,
               style: const TextStyle(fontSize: 16),
               keyboardType: TextInputType.visiblePassword,
               textInputAction: TextInputAction.send,
-              obscureText: true,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -140,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 GestureDetector(
                   onTap: (){
-                    // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const ResetPassword()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const ResetPassword()));
                   },
                   child: const Text(
                     "Forgot password?",
@@ -152,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 32,),
             ElevatedButton(
               onPressed: () {
-                signIn(emailController.text, passwordController.text);
+                signIn(emailController.text, passwordController.text);             
               },
               child: SizedBox(
                 width: MediaQuery.of(context).size.width - 32,
