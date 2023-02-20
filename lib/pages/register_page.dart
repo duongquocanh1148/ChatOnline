@@ -133,16 +133,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   onTap: (){
                     pickImage();
                   },
-                  child: image != null ? ClipOval(
-                    child: Image.file(
-                      image!, width: 128, height: 128, fit: BoxFit.cover,
+                  child: ClipOval(
+                      child: image != null? Image.file(
+                        image!,width: 128,
+                        height: 128,
+                        fit: BoxFit.cover,):
+                      Image.asset(
+                        'assets/images/user_img.png',
+                        width: 128,
+                        height: 128,
+                        fit: BoxFit.cover,
                       ),
-                    )
-                    :Image.asset('assets/images/user_img.png',
-                      width: 128,
-                      height: 128,
-                      fit: BoxFit.cover,
-                    )
+                    ),
                 ),
               ),
               const SizedBox(height: 32,),

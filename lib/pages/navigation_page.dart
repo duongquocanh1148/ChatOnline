@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'pages.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -20,6 +21,9 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.blue,
+    ));
     return Scaffold(
       body: screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
