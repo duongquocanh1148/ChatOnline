@@ -151,7 +151,6 @@ class _ChangeInfoPageState extends State<ChangeInfoPage> {
                     border: const OutlineInputBorder(),
                     hintText: "Email",
                     errorText: !isEmailValidation ? "Please enter your email!" :null),
-                    
                   ),
                 const SizedBox(height: 16,),
                 ElevatedButton(
