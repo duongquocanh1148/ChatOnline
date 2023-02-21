@@ -247,7 +247,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 12,),
               TextField(
                 controller: cfpassController,
-                obscureText: !showPW,
+                obscureText: !showCfpass,
                 style: const TextStyle(fontSize: 16),
                 keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.send,               
