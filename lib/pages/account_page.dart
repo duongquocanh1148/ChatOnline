@@ -20,12 +20,12 @@ class _AccountPageState extends State<AccountPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   Future signOut() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(auth.currentUser!.uid)
-        .update({
-      'token': '',
-    });
+    // await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(auth.currentUser!.uid)
+    //     .update({
+    //   'token': '',
+    // });
     auth.signOut();
   }
   
