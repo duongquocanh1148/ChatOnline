@@ -62,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
           await firebaseAuth.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text)
           .then((value){
             setState(() {
-              id = value.user!.uid; //Hoi Duy
+              id = value.user!.uid;
             });            
           });
           String imageURL = '';
