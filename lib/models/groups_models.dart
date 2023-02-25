@@ -6,33 +6,32 @@ import 'package:flutter/foundation.dart';
 
 import 'models.dart';
 
-class ConversationModel {
+class GroupModel {
   String cid;
   String conName;
   String? image;
-  bool? isFriend;
   String? lastMes;
-  Timestamp? lastTime; 
+  Timestamp? lastTime;
+  bool? isGroup;
+  String adminId;
+  List<UserModel>? members;
   List<MessageModel>? messages;
-  ConversationModel({
+  GroupModel({
     required this.cid,
     required this.conName,
     this.image,
-    this.isFriend,
     this.lastMes,
     this.lastTime,
+    this.isGroup,
+    required this.adminId,
+    this.members,
     this.messages,
   });
 
-  
-  
-
-
-  ConversationModel copyWith({
+  GroupModel copyWith({
     String? cid,
     String? conName,
     String? image,
-    bool? isFriend,
     String? lastMes,
     Timestamp? lastTime,
     bool? isGroup,
@@ -40,13 +39,15 @@ class ConversationModel {
     List<UserModel>? members,
     List<MessageModel>? messages,
   }) {
-    return ConversationModel(
+    return GroupModel(
       cid: cid ?? this.cid,
       conName: conName ?? this.conName,
       image: image ?? this.image,
-      isFriend: isFriend ?? this.isFriend,
       lastMes: lastMes ?? this.lastMes,
       lastTime: lastTime ?? this.lastTime,
+      isGroup: isGroup ?? this.isGroup,
+      adminId: adminId ?? this.adminId,
+      members: members ?? this.members,
       messages: messages ?? this.messages,
     );
   }
@@ -56,45 +57,51 @@ class ConversationModel {
       'cid': cid,
       'conName': conName,
       'image': image,
-      'isFriend': isFriend,
       'lastMes': lastMes,
       'lastTime': lastTime,
+      'isGroup': isGroup,
+      'adminId': adminId,
+      'members': members??[],
       'messages': messages??[],
     };
   }
 
-  factory ConversationModel.fromMap(Map<String, dynamic> map) {
-    return ConversationModel(
+  factory GroupModel.fromMap(Map<String, dynamic> map) {
+    return GroupModel(
       cid: map['cid'] as String,
       conName: map['conName'] as String,
       image: map['image'] != null ? map['image'] as String : null,
-      isFriend: map['isFriend'] != null ? map['isFriend'] as bool : null,
       lastMes: map['lastMes'] != null ? map['lastMes'] as String : null,
       lastTime: map['lastTime'],
+      isGroup: map['isGroup'] != null ? map['isGroup'] as bool : null,
+      adminId: map['adminId'] as String,
+      members: map['members'],
       messages: map['messages'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ConversationModel.fromJson(String source) => ConversationModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory GroupModel.fromJson(String source) => GroupModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'ConversationModel(cid: $cid, conName: $conName, image: $image, isFriend: $isFriend, lastMes: $lastMes, lastTime: $lastTime, messages: $messages)';
+    return 'GroupModel(cid: $cid, conName: $conName, image: $image, lastMes: $lastMes, lastTime: $lastTime, isGroup: $isGroup, adminId: $adminId, members: $members, messages: $messages)';
   }
 
   @override
-  bool operator ==(covariant ConversationModel other) {
+  bool operator ==(covariant GroupModel other) {
     if (identical(this, other)) return true;
   
     return 
       other.cid == cid &&
       other.conName == conName &&
       other.image == image &&
-      other.isFriend == isFriend &&
       other.lastMes == lastMes &&
-      other.lastTime == lastTime &&     
+      other.lastTime == lastTime &&
+      other.isGroup == isGroup &&
+      other.adminId == adminId &&
+      listEquals(other.members, members) &&
       listEquals(other.messages, messages);
   }
 
@@ -103,9 +110,11 @@ class ConversationModel {
     return cid.hashCode ^
       conName.hashCode ^
       image.hashCode ^
-      isFriend.hashCode ^
       lastMes.hashCode ^
       lastTime.hashCode ^
+      isGroup.hashCode ^
+      adminId.hashCode ^
+      members.hashCode ^
       messages.hashCode;
   }
 }
