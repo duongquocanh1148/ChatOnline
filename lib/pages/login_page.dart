@@ -79,15 +79,18 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 32,
             ),
-            TextFieldWidget.base(
-              controller: emailController,
-              hint: "Email",
-              icon: Icons.email,
-              error: "Email invalidate!",
-              isValidation: isEmailValidation,
+            TextField(
+              controller: emailController,            
               style: const TextStyle(fontSize: 16),
-              textInputType: TextInputType.emailAddress,
+              keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: "Email",
+                  prefixIcon: const Icon(Icons.email),
+                  border: const OutlineInputBorder(),
+                  errorText: !isEmailValidation ? "Email invalidate!" : null),
               onChanged: (text) {
                 setState(() {
                   isEmailValidation = validateEmail(emailController.text);
