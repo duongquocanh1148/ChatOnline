@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/models/conversation_models.dart';
 import 'package:chatonline/pages/add_conversation.dart';
+import 'package:chatonline/widget/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +33,7 @@ class _ConversationPageState extends State<ConversationPage> {
       body: conversationList(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const AddConversation()));
+          nextScreen(context, AddConversation());
         },
         elevation: 0,
         child: const Icon(Icons.add),

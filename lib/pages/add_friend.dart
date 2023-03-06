@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/models/models.dart';
+import 'package:chatonline/widget/widgets.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../function/fnc_conversation.dart';
 
 class AddFriend extends StatefulWidget {
   const AddFriend({super.key});
@@ -18,6 +21,18 @@ class _AddFriendState extends State<AddFriend> {
 
   final TextEditingController _searchUserController = TextEditingController();
   String searchString = '';
+
+  Future addFriend(String uid) async{
+    try{
+      CollectionReference requests = FirebaseFirestore.instance.collection('users').doc(uid).collection('requests');
+      Map<String, dynamic>? map  = await getUserData(FirebaseAuth.instance.currentUser!.uid);
+      await requests.doc(FirebaseAuth.instance.currentUser!.uid).set(map);
+      showSnackBar(context, Colors.green, "Send a friend request");
+
+    }on FirebaseAuthException catch (e) {
+      showSnackBar(context, Colors.red, e.message.toString());
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -118,6 +133,7 @@ class _AddFriendState extends State<AddFriend> {
                           padding: EdgeInsets.zero,
                           splashRadius: 22.0,
                           onPressed: () {
+                            addFriend(userModel.userID!);
                           },
                           icon: const Icon(Icons.person_add,size:  18.0,),color: Colors.white,),
                       ),
@@ -134,28 +150,4 @@ class _AddFriendState extends State<AddFriend> {
     );
   }
 
-//   Future add() async{
-//    try{
-//
-//     CollectionReference requests = FirebaseFirestore.instance.collection('users').doc(userID).collection('requests');
-//      Map<String, dynamic>? map  = await getUserData(FirebaseAuth.instance.currentUser!.uid);
-//     await requests.doc(FirebaseAuth.instance.currentUser!.uid).set(map);
-//      //map = await getUserData(userID!);
-//
-//    }on FirebaseAuthException catch (e) {
-//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//           content: Text(e.message.toString()),
-//           backgroundColor: Colors.red,
-//           behavior: SnackBarBehavior.floating,
-//         ));
-//   }
-// }
-//   Future<Map<String, dynamic>?> getUserData(String uid) async{
-//       Map<String, dynamic>? userData;
-//       await FirebaseFirestore.instance.collection('users')
-//           .doc(uid).get().then((value) async{
-//            userData = value.data();
-//       });
-//       return userData;
-//   }
 }

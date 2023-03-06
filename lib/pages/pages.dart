@@ -8,5 +8,6 @@ export 'change_info_page.dart';
 export 'change_password_page.dart';
 export 'reset_password_page.dart';
 export 'add_conversation.dart';
+export 'conversation_detail_page.dart';
 
 export 'package:chatonline/widget/widgets.dart';

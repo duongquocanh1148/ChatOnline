@@ -103,7 +103,7 @@ class _AccountPageState extends State<AccountPage> {
                   onTap: ()async{
                     await signOut();
                     // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>const LoginPage()), (route) => false);
+                    nextScreenRemove(context, LoginPage());
                   },
                 ),
               ]),
