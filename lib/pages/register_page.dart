@@ -1,5 +1,6 @@
 
 import 'dart:io';
+import 'package:chatonline/widget/widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,25 +81,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
           // ignore: avoid_single_cascade_in_expression_statements
           FirebaseFirestore.instance.collection('users').doc(map['userID']).set(map).then((value){
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Register successfully"),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.green,
-              ));
-              Navigator.pop(context);
+            showSnackBar(context, Colors.green, "Register successfully");
+            Navigator.pop(context);
           });
         } on FirebaseAuthException catch(e){
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(e.message.toString()),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.red,));
+          showSnackBar(context, Colors.red, e.message.toString());
         }
       }else{
-         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Password does not match"),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.red,
-              ));
+        showSnackBar(context, Colors.red, "Password does not match");
       }
     }
   }

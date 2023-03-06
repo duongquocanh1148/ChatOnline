@@ -1,3 +1,4 @@
+import 'package:chatonline/widget/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,21 +28,12 @@ class _ResetPasswordState extends State<ResetPassword> {
       try{
         await firebaseAuth.sendPasswordResetEmail(email: emailController.text);
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Check your email"),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.green,
-          ));
-        // ignore: use_build_context_synchronously
+        showSnackBar(context, Colors.green, "Check your password");
         Navigator.of(context).pop(context);
 
       }
       on PlatformException catch(e){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(e.message.toString()),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-          ));
+        showSnackBar(context, Colors.red, e.message.toString());
       }
     }
   }

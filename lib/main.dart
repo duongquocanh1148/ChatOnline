@@ -2,19 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:chatonline/pages/pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-Future<void> _firebaseMessageBackground(RemoteMessage message) async{
-  print(message.messageId);
-}
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseMessaging.instance.getInitialMessage();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessageBackground);
   runApp(const MyApp());
 }
 
