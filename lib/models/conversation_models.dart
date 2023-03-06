@@ -62,7 +62,9 @@ class ConversationModel {
       'messages': messages??[],
     };
   }
-
+  ConversationModel.fromJson(Map<String, dynamic> map){
+    
+  }
   factory ConversationModel.fromMap(Map<String, dynamic> map) {
     return ConversationModel(
       cid: map['cid'] as String,

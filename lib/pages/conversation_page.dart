@@ -5,7 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
 import '../widget/widgets.dart';
+
 
 
 class ConversationPage extends StatefulWidget {
@@ -54,7 +56,9 @@ class _ConversationPageState extends State<ConversationPage> {
           return ListView.builder(
             itemCount: snapShot.data!.docs.length,
             itemBuilder: (context, index) {
+
               ConversationModel conversationModel = ConversationModel.fromMap(snapShot.data!.docs[index].data() as Map<String, dynamic>);                  
+
               return Container(
                 decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
                 child: ListTile(              
@@ -77,9 +81,11 @@ class _ConversationPageState extends State<ConversationPage> {
                     conversationModel.conName,
                     style: const TextStyle(fontSize: 16),
                   ),
+
                   onTap: () => {
                     //nextScreenReplace(context, )
                   },
+
                 ),
               );
             },

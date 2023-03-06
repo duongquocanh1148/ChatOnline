@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-/*class CustomTextFiled extends StatefulWidget {
+class CustomTextFiled extends StatefulWidget {
   final String hint;
   final IconData icon;
   final String error;
@@ -18,20 +18,19 @@ import 'package:flutter/material.dart';
 class _CustomTextFiledState extends State<CustomTextFiled> {
   @override
   Widget build(BuildContext context) {
-    
     return TextField(
       decoration: InputDecoration(
-        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),        
+        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),        
         filled: true,
         fillColor: Colors.white,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         hintText: widget.hint,
 
       )
     );
   }
-}*/
+}
 class TextFieldWidget{
   static Widget base({
     required ValueChanged<String> onChanged,
@@ -49,7 +48,7 @@ class TextFieldWidget{
   }
   ){
     return TextField(
-      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
         focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),        
