@@ -5,7 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../models/user_models.dart';
+
+import '../widget/widgets.dart';
+
+
 
 class ConversationPage extends StatefulWidget {
   const ConversationPage({ Key? key }) : super(key: key);
@@ -53,9 +56,9 @@ class _ConversationPageState extends State<ConversationPage> {
           return ListView.builder(
             itemCount: snapShot.data!.docs.length,
             itemBuilder: (context, index) {
-              ConversationModel conversationModel = ConversationModel.fromJson(
-                  snapShot.data!.docs[index].data() as Map<String, dynamic>);
-                  
+
+              ConversationModel conversationModel = ConversationModel.fromMap(snapShot.data!.docs[index].data() as Map<String, dynamic>);                  
+
               return Container(
                 decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
                 child: ListTile(              
@@ -78,19 +81,11 @@ class _ConversationPageState extends State<ConversationPage> {
                     conversationModel.conName,
                     style: const TextStyle(fontSize: 16),
                   ),
-                  trailing: Container(
-                    width: 36,
-                    height: 36.0,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.blue.shade400),
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      splashRadius: 22.0,
-                            onPressed: () async{                         
-                                  
-                                        
-                            }, icon:
-                             const Icon(Icons.person_add,size:  18.0,),color: Colors.white,),
-                  ),
+
+                  onTap: () => {
+                    //nextScreenReplace(context, )
+                  },
+
                 ),
               );
             },
