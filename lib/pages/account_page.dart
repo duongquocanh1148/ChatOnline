@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:chatonline/models/user_models.dart';
-import 'package:chatonline/pages/change_info_page.dart';
-import 'package:chatonline/pages/change_password_page.dart';
 import 'package:chatonline/pages/pages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -83,7 +81,7 @@ class _AccountPageState extends State<AccountPage> {
                   leading: const Icon(Icons.info_outline),
                   title: const Text('Update information'),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const ChangeInfoPage()));
+                    nextScreen(context, ChangeInfoPage());
                   },
                 ),
                 ListTile(
@@ -93,7 +91,7 @@ class _AccountPageState extends State<AccountPage> {
                   leading: const Icon(Icons.key),
                   title: const Text('Change password'),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const ChangePasswordPage()));
+                    nextScreen(context, ChangePasswordPage());
                   },
                 ),
                 ListTile(

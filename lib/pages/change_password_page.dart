@@ -1,4 +1,5 @@
 import 'package:chatonline/pages/account_page.dart';
+import 'package:chatonline/widget/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -29,19 +30,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> const AccountPage()), (route) => false);
         } 
         on FirebaseAuthException catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(e.message.toString()),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-          ));
+          showSnackBar(context, Colors.red, e.message.toString());
         }
       }
       else{
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Password does not match'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ));
+        showSnackBar(context, Colors.red, "Password does not match");
       }
     }
   }
