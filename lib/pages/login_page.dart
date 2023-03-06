@@ -33,9 +33,7 @@ class _LoginPageState extends State<LoginPage> {
             .signInWithEmailAndPassword(email: email, password: pass)
             .then((value) {
           showSnackBar(context, Colors.green, "Sign in successfully");
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const NavigationPage()),
-              (route) => false);
+          nextScreenRemove(context, NavigationPage());
         });
       } on FirebaseAuthException catch (e) {
         showSnackBar(context, Colors.red, e.message.toString());

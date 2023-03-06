@@ -27,7 +27,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         try {
           await FirebaseAuth.instance.currentUser!.updatePassword(newPWController.text);
           // ignore: use_build_context_synchronously
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> const AccountPage()), (route) => false);
+          nextScreenRemove(context, AccountPage());
         } 
         on FirebaseAuthException catch (e) {
           showSnackBar(context, Colors.red, e.message.toString());
