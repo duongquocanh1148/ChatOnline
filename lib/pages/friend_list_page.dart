@@ -53,15 +53,38 @@ class _FriendListState extends State<FriendList> {
                   onTap: () => {
                     //nextScreenReplace(context, )
                   },
-                  trailing: Container(
-                    width: 80.0,
+                  trailing: SizedBox(
+                    width: 90.0,
                     height: 36.0,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.grey),
-                    child: TextButton(
-                      onPressed: () {
-                        showSnackBar(context, Colors.red, "Chưa viết");
-                      },
-                      child: Text("Unfriend", style: TextStyle(color: Colors.white),),),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          width: 36.0,
+                          height: 36.0,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.grey),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 22.0,
+                            onPressed: () {
+                              showSnackBar(context, Colors.red, "Chưa viết");
+                            },
+                            icon: const Icon(Icons.person_remove,size:  18.0,),color: Colors.white,),
+                        ),
+                        Container(
+                          width: 36.0,
+                          height: 36.0,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.blue.shade400),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 22.0,
+                            onPressed: () {
+                              showSnackBar(context, Colors.red, "Chưa viết");
+                            },
+                            icon: const Icon(Icons.message,size:  18.0,),color: Colors.white,),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
