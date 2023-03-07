@@ -26,8 +26,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       if(newPWController.text == cfpassController.text){
         try {
           await FirebaseAuth.instance.currentUser!.updatePassword(newPWController.text);
-          // ignore: use_build_context_synchronously
-          nextScreenRemove(context, AccountPage());
+          Navigator.pop(context);
         } 
         on FirebaseAuthException catch (e) {
           showSnackBar(context, Colors.red, e.message.toString());

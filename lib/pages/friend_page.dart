@@ -1,16 +1,13 @@
+import 'package:chatonline/pages/friend_list_page.dart';
+import 'package:chatonline/pages/friend_request.dart';
 import 'package:chatonline/widget/widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'add_friend.dart';
 
-class FriendPage extends StatefulWidget {
-  const FriendPage({ Key? key }) : super(key: key);
+class FriendPage extends StatelessWidget {
+  const FriendPage({Key? key}) : super(key: key);
 
-  @override
-  State<FriendPage> createState() => _FriendPageState();
-}
-
-class _FriendPageState extends State<FriendPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -51,6 +48,12 @@ class _FriendPageState extends State<FriendPage> {
               ),
             ],
           ),),
+        body: TabBarView(
+          children: [
+            FriendList(),
+            FriendRequest(),
+          ],
+        ),
       ),
     );
   }
