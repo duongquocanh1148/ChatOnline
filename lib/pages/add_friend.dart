@@ -22,6 +22,7 @@ class _AddFriendState extends State<AddFriend> {
   final TextEditingController _searchUserController = TextEditingController();
   String searchString = '';
 
+  //Có bug -> nằm trong list friend vẫn request được
   Future addFriend(String uid) async{
     try{
       CollectionReference requests = FirebaseFirestore.instance.collection('users').doc(uid).collection('requests');
