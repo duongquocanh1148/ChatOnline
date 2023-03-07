@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/models/conversation_models.dart';
 import 'package:chatonline/pages/add_conversation.dart';
+import 'package:chatonline/pages/conversation_detail_page.dart';
 import 'package:chatonline/widget/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../function/fnc_conversation.dart';
 
 class ConversationPage extends StatefulWidget {
   const ConversationPage({ Key? key }) : super(key: key);
@@ -24,9 +27,9 @@ class _ConversationPageState extends State<ConversationPage> {
         ),
         actions: [
           IconButton(onPressed: (){
-            
-          }, 
-          icon: const Icon(Icons.search),
+
+            },
+            icon: const Icon(Icons.search),
           )
         ],
       ),
@@ -56,29 +59,30 @@ class _ConversationPageState extends State<ConversationPage> {
 
               return Container(
                 decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
-                child: ListTile(              
+                child: ListTile(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       leading: ClipOval(
-                            child: conversationModel.image!.isNotEmpty
-                                ? CachedNetworkImage(
-                                    imageUrl: conversationModel.image!,
-                                    width: 48,
-                                    height: 48,
-                                  )
-                                : Image.asset(
-                                    "assets/images/user_img.png",
-                                    width: 48,
-                                    height: 48,
-                                  ),
+                        child: conversationModel.image!.isNotEmpty
+                          ? CachedNetworkImage(
+                              imageUrl: conversationModel.image!,
+                              width: 48,
+                              height: 48,
+                            )
+                          : Image.asset(
+                              "assets/images/user_img.png",
+                              width: 48,
+                              height: 48,
                           ),
+                        ),
                   title: Text(
                     conversationModel.conName!,
                     style: const TextStyle(fontSize: 16),
                   ),
 
-                  onTap: () => {
-                    //nextScreenReplace(context, )
+                  onTap: () async {
+                    Map<String, dynamic>? userData = await getUserData(conversationModel.cid!);
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ConversationDetailPage(userInfo: userData!)));
                   },
 
                 ),
