@@ -22,8 +22,34 @@ class _AddFriendState extends State<AddFriend> {
   final TextEditingController _searchUserController = TextEditingController();
   String searchString = '';
 
-  //Có bug -> nằm trong list friend vẫn request được
+  //Đã fix -> nằm trong list friend vẫn request được
   Future addFriend(String uid) async{
+    //true là được xử lý add friend
+    bool check = false;
+    //kiểm tra collection field
+    CollectionReference checkCollection = FirebaseFirestore.instance.collection('users').doc(uid)
+      .collection('friends');
+    QuerySnapshot snapshot = await checkCollection.get();
+    if(snapshot.size==0){
+      check = true;
+      print('dont have collection field');
+    }
+    else{
+      //kiểm tra user có tồn tại trong list friend?
+      CollectionReference checkUser = FirebaseFirestore.instance.collection('users').doc(uid)
+          .collection('friends');
+      DocumentSnapshot<Object?> snapshot1 = await checkUser.doc(FirebaseAuth.instance.currentUser!.uid).get();
+      if(snapshot1.exists){
+        check = false;
+        print('is friend');
+        return;
+      }
+      else{
+        check = true;
+        print('isnt friend');
+      }
+    }
+
     try{
       CollectionReference requests = FirebaseFirestore.instance.collection('users').doc(uid).collection('requests');
       Map<String, dynamic>? map  = await getUserData(FirebaseAuth.instance.currentUser!.uid);
