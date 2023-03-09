@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/models/models.dart';
 import 'package:chatonline/widget/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,16 +53,16 @@ class _AddFriendState extends State<AddFriend> {
           return ListView.builder(
             itemCount: snapShot.data!.docs.length,
             itemBuilder: (context, index) {
-              UserModel conversationModel = UserModel.fromJson(snapShot.data!.docs[index].data() as Map<String, dynamic>);                  
+              UserModel user = UserModel.fromJson(snapShot.data!.docs[index].data() as Map<String, dynamic>);                  
               return Container(
                 decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
                 child: ListTile(              
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       leading: ClipOval(
-                            child: conversationModel.image!.isNotEmpty
+                            child: user.image!.isNotEmpty
                                 ? CachedNetworkImage(
-                                    imageUrl: conversationModel.image!,
+                                    imageUrl: user.image!,
                                     width: 48,
                                     height: 48,
                                   )
@@ -72,7 +73,7 @@ class _AddFriendState extends State<AddFriend> {
                                   ),
                           ),
                   title: Text(
-                    conversationModel.conName,
+                    user.userName.toString(),
                     style: const TextStyle(fontSize: 16),
                   ),
                   onTap: () => {
