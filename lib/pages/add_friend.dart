@@ -1,7 +1,9 @@
+import 'package:chatonline/models/models.dart';
 import 'package:chatonline/widget/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
 
 class AddFriend extends StatefulWidget {
   const AddFriend({super.key});
@@ -40,24 +42,49 @@ class _AddFriendState extends State<AddFriend> {
   }
 
   groupList(){
-    return StreamBuilder(
-      stream: users,
-      builder: (context, AsyncSnapshot snapShot){
-        if(snapShot.hasData){
-          if(snapShot.data['users'].length != 0){
-              return const Text(
-                "Hello"
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid).collection('conversations')
+          .snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapShot) {
+        if (snapShot.hasData) {
+          return ListView.builder(
+            itemCount: snapShot.data!.docs.length,
+            itemBuilder: (context, index) {
+              UserModel conversationModel = UserModel.fromJson(snapShot.data!.docs[index].data() as Map<String, dynamic>);                  
+              return Container(
+                decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
+                child: ListTile(              
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      leading: ClipOval(
+                            child: conversationModel.image!.isNotEmpty
+                                ? CachedNetworkImage(
+                                    imageUrl: conversationModel.image!,
+                                    width: 48,
+                                    height: 48,
+                                  )
+                                : Image.asset(
+                                    "assets/images/user_img.png",
+                                    width: 48,
+                                    height: 48,
+                                  ),
+                          ),
+                  title: Text(
+                    conversationModel.conName,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  onTap: () => {
+                    //nextScreenReplace(context, )
+                  },
+                ),
               );
-          }else{
-              return const Text(
-                "No users"
-              );
-          }
-        }else{
-            return const Text(
-                "Check your internet again!"
-              );
-        }  
+            },
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
       },
     );
   }
