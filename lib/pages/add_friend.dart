@@ -22,17 +22,14 @@ class _AddFriendState extends State<AddFriend> {
   final TextEditingController _searchUserController = TextEditingController();
   String searchString = '';
 
-  //Đã fix -> nằm trong list friend vẫn request được
-  Future addFriend(String uid) async{
-    //true là được xử lý add friend
-    bool check = false;
+  Future<bool> isFriend(String uid) async{
     //kiểm tra collection field
     CollectionReference checkCollection = FirebaseFirestore.instance.collection('users').doc(uid)
-      .collection('friends');
+        .collection('friends');
     QuerySnapshot snapshot = await checkCollection.get();
     if(snapshot.size==0){
-      check = true;
-      print('dont have collection field');
+     print('dont have collection field');
+      return true;
     }
     else{
       //kiểm tra user có tồn tại trong list friend?
@@ -40,24 +37,28 @@ class _AddFriendState extends State<AddFriend> {
           .collection('friends');
       DocumentSnapshot<Object?> snapshot1 = await checkUser.doc(FirebaseAuth.instance.currentUser!.uid).get();
       if(snapshot1.exists){
-        check = false;
-        print('is friend');
-        return;
+       print('is friend');
+        return false;
       }
       else{
-        check = true;
-        print('isnt friend');
+       print('isnt friend');
+        return true;
       }
     }
+  }
 
-    try{
-      CollectionReference requests = FirebaseFirestore.instance.collection('users').doc(uid).collection('requests');
-      Map<String, dynamic>? map  = await getUserData(FirebaseAuth.instance.currentUser!.uid);
-      await requests.doc(FirebaseAuth.instance.currentUser!.uid).set(map);
-      showSnackBar(context, Colors.green, "Send a friend request");
+  Future addFriend(String uid) async{
+    var get = await isFriend(uid);
+    if(get==true){
+      try{
+        CollectionReference requests = FirebaseFirestore.instance.collection('users').doc(uid).collection('requests');
+        Map<String, dynamic>? map  = await getUserData(FirebaseAuth.instance.currentUser!.uid);
+        await requests.doc(FirebaseAuth.instance.currentUser!.uid).set(map);
+        showSnackBar(context, Colors.green, "Send a friend request");
 
-    }on FirebaseAuthException catch (e) {
-      showSnackBar(context, Colors.red, e.message.toString());
+      }on FirebaseAuthException catch (e) {
+        showSnackBar(context, Colors.red, e.message.toString());
+      }
     }
   }
   
@@ -128,7 +129,7 @@ class _AddFriendState extends State<AddFriend> {
               physics: const NeverScrollableScrollPhysics(), //not allow to top scroll
               shrinkWrap: true, //popup
               itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index){
+              itemBuilder: (context, index) {
                 UserModel userModel = UserModel.fromJson(snapshot.data!.docs[index].data() as
                 Map<String, dynamic>);
                 if(userModel.userName!.toLowerCase().contains(searchString.toLowerCase())) {
@@ -152,18 +153,15 @@ class _AddFriendState extends State<AddFriend> {
                         ),
                       ),
                       title: Text(userModel.userName!),
-                      trailing: Container(
-                        width: 36,
-                        height: 36.0,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.blue.shade400),
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          splashRadius: 22.0,
-                          onPressed: () {
-                            addFriend(userModel.userID!);
-                          },
-                          icon: const Icon(Icons.person_add,size:  18.0,),color: Colors.white,),
-                      ),
+
+                     trailing: StreamBuilder<QuerySnapshot>(
+                       stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+                           .collection('friends').snapshots(),
+                       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                         return snapshot.hasData != null ? iconAddFriend(userModel) : null;
+                         // return Placeholder();
+                       },
+                     ),
                     ),
                   );
                 }
@@ -174,6 +172,21 @@ class _AddFriendState extends State<AddFriend> {
           child: Text('No found user'),
         );
       },
+    );
+  }
+
+  iconAddFriend(UserModel userModel) {
+    return Container(
+      width: 36,
+      height: 36.0,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.blue.shade400),
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        splashRadius: 22.0,
+        onPressed: () {
+          addFriend(userModel.userID!);
+        },
+        icon: const Icon(Icons.person_add,size:  18.0,),color: Colors.white,),
     );
   }
 

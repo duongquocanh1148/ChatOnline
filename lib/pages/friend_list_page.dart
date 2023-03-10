@@ -13,6 +13,15 @@ class FriendList extends StatefulWidget {
 }
 
 class _FriendListState extends State<FriendList> {
+
+  Future removeFriend(String uid)async{
+    CollectionReference friend =  FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('friends');
+    await  friend.doc(uid).delete();
+
+    friend =  FirebaseFirestore.instance.collection('users').doc(uid).collection('friends');
+    await  friend.doc(FirebaseAuth.instance.currentUser!.uid).delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -67,7 +76,7 @@ class _FriendListState extends State<FriendList> {
                             padding: EdgeInsets.zero,
                             splashRadius: 22.0,
                             onPressed: () {
-                              showSnackBar(context, Colors.red, "Chưa viết");
+                              removeFriend(friends.userID!);
                             },
                             icon: const Icon(Icons.person_remove,size:  18.0,),color: Colors.white,),
                         ),
