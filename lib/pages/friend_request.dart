@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatonline/function/fnc_conversation.dart';
 import 'package:chatonline/widget/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,28 @@ class FriendRequest extends StatefulWidget {
 }
 
 class _FriendRequestState extends State<FriendRequest> {
+  Future acceptAddFriend(String uid) async{
+    //send my info to friend list of other user
+    Map<String, dynamic>? myData = await getUserData(FirebaseAuth.instance.currentUser!.uid);
+    CollectionReference friends = FirebaseFirestore.instance.collection('users').doc(uid)
+            .collection('friends');
+    await friends.doc(FirebaseAuth.instance.currentUser!.uid).set(myData);
+
+    //send info to my friend list
+    Map<String, dynamic>? friendData = await getUserData(uid);
+    friends = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('friends');
+    await friends.doc(uid).set(friendData);
+
+    await removeFriendRequest(uid);
+
+  }
+
+  Future removeFriendRequest(String uid) async{
+    CollectionReference requests = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('requests');
+    await requests.doc(uid).delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -60,7 +83,7 @@ class _FriendRequestState extends State<FriendRequest> {
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.grey),
                     child: TextButton(
                       onPressed: () {
-                        showSnackBar(context, Colors.red, "Chưa viết");
+                        acceptAddFriend(request.userID!);
                       },
                       child: Text("Accept", style: TextStyle(color: Colors.white),),),
                   ),
