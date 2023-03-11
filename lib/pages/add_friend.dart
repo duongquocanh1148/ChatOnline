@@ -45,8 +45,7 @@ class _AddFriendState extends State<AddFriend> {
   groupList(){
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid).collection('conversations')
+          .collection('users').where(FirebaseAuth.instance.currentUser!.uid)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapShot) {
         if (snapShot.hasData) {

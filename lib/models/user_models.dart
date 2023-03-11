@@ -9,7 +9,7 @@ class UserModel {
   List<UserModel>? friends;
   List<UserModel>? requests;
   List<ConversationModel>? conversations;
-
+  
   UserModel(
       {required this.userID,
       required this.userName,
