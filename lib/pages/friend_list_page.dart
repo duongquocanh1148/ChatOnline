@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatonline/function/fnc_conversation.dart';
 import 'package:chatonline/models/user_models.dart';
+import 'package:chatonline/pages/conversation_detail_page.dart';
 import 'package:chatonline/widget/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,6 +22,61 @@ class _FriendListState extends State<FriendList> {
 
     friend =  FirebaseFirestore.instance.collection('users').doc(uid).collection('friends');
     await  friend.doc(FirebaseAuth.instance.currentUser!.uid).delete();
+
+    updateIsFriend(uid, false);
+  }
+
+  Future updateIsFriend(String uid, bool temp) async{
+    CollectionReference mess = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('conversations');
+    await mess.doc(uid).update({
+      'isFriend' : temp,
+    });
+
+    mess = FirebaseFirestore.instance.collection('users').doc(uid)
+        .collection('conversations');
+    await mess.doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'isFriend' : temp,
+    });
+  }
+
+  Future createNewConversation(String uid) async{
+    String mesDes = '';
+    Map<String, dynamic>? myData  = await getUserData(FirebaseAuth.instance.currentUser!.uid);
+    Map<String, dynamic>? friendData  = await getUserData(uid);
+    Map<String, dynamic>? conversation = {
+      'cid': uid,
+      'conName' : friendData!['userName'],
+      'image': friendData['image'],
+      'lastTime': Timestamp.now(),
+      'lastMes': mesDes,
+      'isFriend': true,
+    };
+
+    await  FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('conversations').doc(uid).set(conversation);
+
+    conversation['conName'] = myData!['userName'];
+    conversation['cid'] = myData['userID'];
+    conversation['image'] = myData['image'];
+
+    await  FirebaseFirestore.instance.collection('users').doc(uid)
+        .collection('conversations').doc(FirebaseAuth.instance.currentUser!.uid).set(conversation);
+  }
+
+  Future goToConversation(String uid, BuildContext context)async{
+    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('conversations').doc(uid).get().then((value) async{
+      if(!value.exists){
+        await createNewConversation(uid);
+      }
+      else{
+        updateIsFriend(uid, true);
+      }
+    });
+
+    Map<String, dynamic>? userData = await getUserData(uid);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ConversationDetailPage(userInfo: userData!)));
   }
 
   @override
@@ -88,7 +145,7 @@ class _FriendListState extends State<FriendList> {
                             padding: EdgeInsets.zero,
                             splashRadius: 22.0,
                             onPressed: () {
-                              showSnackBar(context, Colors.red, "Chưa viết");
+                              goToConversation(friends.userID!, context);
                             },
                             icon: const Icon(Icons.message,size:  18.0,),color: Colors.white,),
                         ),

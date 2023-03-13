@@ -61,7 +61,7 @@ class _AddFriendState extends State<AddFriend> {
       }
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,14 +154,15 @@ class _AddFriendState extends State<AddFriend> {
                       ),
                       title: Text(userModel.userName!),
 
-                     trailing: StreamBuilder<QuerySnapshot>(
-                       stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
-                           .collection('friends').snapshots(),
-                       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                         return snapshot.hasData != null ? iconAddFriend(userModel) : null;
-                         // return Placeholder();
-                       },
-                     ),
+                     trailing: iconAddFriend(userModel),
+                     //  trailing: StreamBuilder<QuerySnapshot>(
+                     //   stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+                     //       .collection('friends').snapshots(),
+                     //   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                     //     return snapshot.hasData != null ? iconAddFriend(userModel) : null;
+                     //     // return Placeholder();
+                     //   },
+                     // ),
                     ),
                   );
                 }

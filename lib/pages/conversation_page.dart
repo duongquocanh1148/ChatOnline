@@ -47,7 +47,7 @@ class _ConversationPageState extends State<ConversationPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid).collection('conversations')
+          .doc(FirebaseAuth.instance.currentUser!.uid).collection('conversations').orderBy('lastTime', descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapShot) {
         if (snapShot.hasData) {
@@ -57,36 +57,41 @@ class _ConversationPageState extends State<ConversationPage> {
 
               ConversationModel conversationModel = ConversationModel.fromJson(snapShot.data!.docs[index].data() as Map<String, dynamic>);
 
-              return Container(
-                decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
-                child: ListTile(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      leading: ClipOval(
-                        child: conversationModel.image!.isNotEmpty
+              if(conversationModel.isFriend!){
+                return Container(
+                  decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
+                  child: ListTile(
+                    contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    leading: ClipOval(
+                      child: conversationModel.image!.isNotEmpty
                           ? CachedNetworkImage(
-                              imageUrl: conversationModel.image!,
-                              width: 48,
-                              height: 48,
-                            )
+                        imageUrl: conversationModel.image!,
+                        width: 48,
+                        height: 48,
+                      )
                           : Image.asset(
-                              "assets/images/user_img.png",
-                              width: 48,
-                              height: 48,
-                          ),
-                        ),
-                  title: Text(
-                    conversationModel.conName!,
-                    style: const TextStyle(fontSize: 16),
+                        "assets/images/user_img.png",
+                        width: 48,
+                        height: 48,
+                      ),
+                    ),
+                    title: Text(
+                      conversationModel.conName!,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+
+                    onTap: () async {
+                      Map<String, dynamic>? userData = await getUserData(conversationModel.cid!);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ConversationDetailPage(userInfo: userData!)));
+                    },
+
                   ),
-
-                  onTap: () async {
-                    Map<String, dynamic>? userData = await getUserData(conversationModel.cid!);
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ConversationDetailPage(userInfo: userData!)));
-                  },
-
-                ),
-              );
+                );
+              }
+              else{
+                return const Center();
+              }
             },
           );
         } else {
