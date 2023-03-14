@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/function/fnc_conversation.dart';
 import 'package:chatonline/models/message_models.dart';
 import 'package:chatonline/pages/conversation_info_page.dart';
-import 'package:chatonline/widget/widgets.dart';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +84,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                   height: 36,
                   fit: BoxFit.cover,
                 ):Image.asset(
-                  'assets/images/user_img.png',
+                  ImagePath.avatar,
                   width: 36,
                   height: 36,
                   fit: BoxFit.cover,
@@ -201,7 +201,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                                         height: 36,
                                         fit: BoxFit.cover,
                                       ):Image.asset(
-                                        'assets/images/user_img.png',
+                                        ImagePath.avatar,
                                         width: 36,
                                         height: 36,
                                         fit: BoxFit.cover,

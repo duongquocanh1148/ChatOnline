@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/models/conversation_models.dart';
 import 'package:chatonline/pages/add_conversation.dart';
 import 'package:chatonline/pages/conversation_detail_page.dart';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:chatonline/widget/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,7 +64,7 @@ class _ConversationPageState extends State<ConversationPage> {
               ConversationModel conversationModel = ConversationModel.fromJson(snapShot.data!.docs[index].data() as Map<String, dynamic>);
 
               if(conversationModel.conName!.toLowerCase().contains(searchString.toLowerCase())){
-                if(conversationModel.isFriend!){
+
                   return Container(
                     decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
                     child: ListTile(
@@ -77,7 +78,7 @@ class _ConversationPageState extends State<ConversationPage> {
                           height: 48,
                         )
                             : Image.asset(
-                          "assets/images/user_img.png",
+                          ImagePath.avatar,
                           width: 48,
                           height: 48,
                         ),
@@ -98,10 +99,7 @@ class _ConversationPageState extends State<ConversationPage> {
                 else{
                   return const Center();
                 }
-              }
-              else{
-                return const Center();
-              }
+
             },
           );
         } else {

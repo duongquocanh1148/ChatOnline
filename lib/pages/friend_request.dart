@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/function/fnc_conversation.dart';
-import 'package:chatonline/widget/widgets.dart';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +64,7 @@ class _FriendRequestState extends State<FriendRequest> {
                       height: 48,
                     )
                         : Image.asset(
-                      "assets/images/user_img.png",
+                      ImagePath.avatar,
                       width: 48,
                       height: 48,
                     ),
@@ -72,6 +72,7 @@ class _FriendRequestState extends State<FriendRequest> {
                   title: Text(
                     request.userName!,
                     style: const TextStyle(fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
                   ),
 
                   onTap: () => {
@@ -80,7 +81,7 @@ class _FriendRequestState extends State<FriendRequest> {
                   trailing: Container(
                     width: 80.0,
                     height: 36.0,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.grey),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.blue.shade400),
                     child: TextButton(
                       onPressed: () {
                         acceptAddFriend(request.userID!);

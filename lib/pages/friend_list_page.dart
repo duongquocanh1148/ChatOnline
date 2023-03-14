@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/function/fnc_conversation.dart';
 import 'package:chatonline/models/user_models.dart';
 import 'package:chatonline/pages/conversation_detail_page.dart';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:chatonline/widget/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -106,7 +107,7 @@ class _FriendListState extends State<FriendList> {
                       height: 48,
                     )
                         : Image.asset(
-                      "assets/images/user_img.png",
+                      ImagePath.avatar,
                       width: 48,
                       height: 48,
                     ),
@@ -128,18 +129,6 @@ class _FriendListState extends State<FriendList> {
                         Container(
                           width: 36.0,
                           height: 36.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.grey),
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            splashRadius: 22.0,
-                            onPressed: () {
-                              removeFriend(friends.userID!);
-                            },
-                            icon: const Icon(Icons.person_remove,size:  18.0,),color: Colors.white,),
-                        ),
-                        Container(
-                          width: 36.0,
-                          height: 36.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.blue.shade400),
                           child: IconButton(
                             padding: EdgeInsets.zero,
@@ -149,6 +138,40 @@ class _FriendListState extends State<FriendList> {
                             },
                             icon: const Icon(Icons.message,size:  18.0,),color: Colors.white,),
                         ),
+                        Container(
+                          width: 36.0,
+                          height: 36.0,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(36),color:Colors.red.shade400),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 22.0,
+                            onPressed: () {
+                              // removeFriend(friends.userID!);
+                              showDialog(context: context, builder: (context){
+                                return AlertDialog(
+                                  title: const Text('Unfriend'),
+                                  content: const Text('Are you sure to unfriend?'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: (){
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Cancel')
+                                    ),
+                                    TextButton(
+                                        onPressed: (){
+                                          removeFriend(friends.userID!);
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Yes')
+                                    ),
+                                  ],
+                                );
+                              });
+                            },
+                            icon: const Icon(Icons.person_remove,size:  18.0,),color: Colors.white,),
+                        ),
+
                       ],
                     ),
                   ),

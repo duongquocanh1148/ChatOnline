@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/models/user_models.dart';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -83,62 +84,72 @@ class _ChangeInfoPageState extends State<ChangeInfoPage> {
       appBar: AppBar(
           title: const Text('Update information'),
           elevation: 0,
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await saveInfo(imageURL.toString());
+                Navigator.pop(context);
+              },
+              child: const Text('Save', style: TextStyle(color: Colors.white, fontSize: 18),)
+            ),
+          ],
         ),
-      body: FutureBuilder(
-        future: FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid).get(),
+      body: SingleChildScrollView(
+        child: FutureBuilder(
+          future: FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid).get(),
 
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          UserModel userModel = UserModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            UserModel userModel = UserModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
 
-          nameController.text = userModel.userName!;
-          emailController.text = userModel.email!;
-          imageURL = userModel.image!;
+            nameController.text = userModel.userName!;
+            emailController.text = userModel.email!;
+            imageURL = userModel.image!;
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(children: [
-              Center(
-                child: GestureDetector(
-                  onTap: (){
-                    pickImage();
-                  },
-                  child: ClipOval(
-                      child: image != null? Image.file(
-                        image!,width: 128,
-                        height: 128,
-                        fit: BoxFit.cover,):
-                      userModel.image!.isNotEmpty? CachedNetworkImage(
-                        imageUrl: userModel.image!,
-                        width: 128,
-                        height: 128,
-                        fit: BoxFit.cover,):
-                      Image.asset(
-                        'assets/images/user_img.png',
-                        width: 128,
-                        height: 128,
-                        fit: BoxFit.cover,
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(children: [
+                Center(
+                  child: GestureDetector(
+                    onTap: (){
+                      pickImage();
+                    },
+                    child: ClipOval(
+                        child: image != null? Image.file(
+                          image!,width: 128,
+                          height: 128,
+                          fit: BoxFit.cover,):
+                        userModel.image!.isNotEmpty? CachedNetworkImage(
+                          imageUrl: userModel.image!,
+                          width: 128,
+                          height: 128,
+                          fit: BoxFit.cover,):
+                        Image.asset(
+                          ImagePath.avatar,
+                          width: 128,
+                          height: 128,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16,),
-              TextField(
-                controller: nameController,
-                style: const TextStyle(fontSize: 16),
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  prefixIcon: const Icon(Icons.person),
-                  border: const OutlineInputBorder(),
-                  errorText: !isNameValidation ? "Please enter your name!" : null),
-                  
-                ),
-              const SizedBox(height: 16,),
-              TextField(
+                const SizedBox(height: 16,),
+                TextField(
+                  controller: nameController,
+                  style: const TextStyle(fontSize: 16),
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(Icons.person),
+                    border: const OutlineInputBorder(),
+                    errorText: !isNameValidation ? "Please enter your name!" : null),
+                    
+                  ),
+                const SizedBox(height: 16,),
+                TextField(
                   controller: emailController,
                   style: const TextStyle(fontSize: 16),
                   keyboardType: TextInputType.emailAddress,
@@ -152,28 +163,11 @@ class _ChangeInfoPageState extends State<ChangeInfoPage> {
                     hintText: "Email",
                     errorText: !isEmailValidation ? "Please enter your email!" :null),
                   ),
-                const SizedBox(height: 16,),
-                ElevatedButton(
-                  onPressed: () async {
-                    await saveInfo(imageURL.toString());
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
-                  },
-                  // ignore: prefer_const_constructors
-                  child: SizedBox(
-                    width: 48,
-                    height: 48,
-                    child: const Center(
-                        child: Text(
-                          "Save",
-                          style: TextStyle(fontSize: 16),
-                        )
-                    ),
-                  )
-                ),
-            ]),
-          );
-        }
+
+              ]),
+            );
+          }
+        ),
       ),
     );
   }

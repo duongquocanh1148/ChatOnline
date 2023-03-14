@@ -22,7 +22,7 @@ class FriendPage extends StatelessWidget {
             IconButton(onPressed: (){
               nextScreen(context, AddFriend());
             },
-              icon: const Icon(Icons.search),
+              icon: const Icon(Icons.add),
             )
           ],
           bottom: TabBar(
