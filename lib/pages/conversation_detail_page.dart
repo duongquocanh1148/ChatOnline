@@ -58,6 +58,17 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
     });
   }
 
+  //Bug
+  Future removeMessage(String mesID)async{
+    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('conversations').doc(widget.userInfo['userID'])
+        .collection('messages').doc(mesID).delete();
+
+    await FirebaseFirestore.instance.collection('users').doc(widget.userInfo['userID'])
+        .collection('conversations').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('messages').doc(mesID).delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -153,14 +164,13 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                                                 onPressed: () async {
                                                   Navigator.pop(context);
                                                   if(snapshot.data!.docs.length>1){
-                                                    if(index == snapshot.data!.docs.length-1){
+                                                    if(index == snapshot.data!.docs.length){
                                                       await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
                                                           .collection('conversations').doc(widget.userInfo['userID']).update({
                                                         'lastMes': snapshot.data!.docs[index-1].get('lastMes'),
                                                         'lastTime':  snapshot.data!.docs[index-1].get('lastTime'),
                                                       });
                                                     }
-
                                                   }
                                                   //only one mess
                                                   else{
