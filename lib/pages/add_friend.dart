@@ -16,8 +16,8 @@ class AddFriend extends StatefulWidget {
 }
 
 class _AddFriendState extends State<AddFriend> {
-  Icon actionIcon = new Icon(Icons.search);
-  Widget appBarTitle = new Text('Add Friends',);
+  Icon actionIcon = const Icon(Icons.search);
+  Widget appBarTitle = const Text('Add Friends',);
 
   final TextEditingController _searchUserController = TextEditingController();
   String searchString = '';
@@ -67,24 +67,24 @@ class _AddFriendState extends State<AddFriend> {
     return Scaffold(
       appBar: AppBar(
         title: appBarTitle,
-        actions: <Widget> [
-          new IconButton(
+        actions: [
+          IconButton(
             icon: actionIcon,
             onPressed: (){
               setState(() {
                 if(this.actionIcon.icon==Icons.search){
-                  this.actionIcon = new Icon(Icons.close);
-                  this.appBarTitle = new TextField(
+                  this.actionIcon = const Icon(Icons.close);
+                  this.appBarTitle = TextField(
                     controller: _searchUserController,
                     style: new TextStyle(
                       color: Colors.white,
                     ),
-                    decoration: new InputDecoration(
-                      prefixIcon: new Icon(Icons.search, color: Colors.white),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search, color: Colors.white),
                       border: InputBorder.none,
                       // border: OutlineInputBorder(),
                       hintText: "Search...",
-                      hintStyle: new TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
                       contentPadding: EdgeInsets.fromLTRB(4, 14, 4, 0),
                     ),
                     onChanged: (text) {
@@ -109,70 +109,75 @@ class _AddFriendState extends State<AddFriend> {
   }
   handleSearchEnd(){
     setState(() {
-      this.appBarTitle = new Text("Add Friends");
-      this.actionIcon = new Icon(Icons.search);
+      this.appBarTitle = const Text("Add Friends");
+      this.actionIcon = const Icon(Icons.search);
       searchString = '';
       _searchUserController.clear();
     });
   }
 
   userList(){
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('users')
-          .where('userID',
-          isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
-        if(snapshot.hasData){
-          return ListView.builder(
-              physics: const NeverScrollableScrollPhysics(), //not allow to top scroll
-              shrinkWrap: true, //popup
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                UserModel userModel = UserModel.fromJson(snapshot.data!.docs[index].data() as
-                Map<String, dynamic>);
-                if(userModel.userName!.toLowerCase().contains(searchString.toLowerCase())) {
-                  return Container(
-                    decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      leading: ClipOval(
-                        child: userModel.image!.isNotEmpty
-                            ? CachedNetworkImage(
-                          imageUrl: userModel.image!,
-                          width: 48,
-                          height: 48,
-                          fit: BoxFit.cover,
-                        )
-                            : Image.asset("assets/images/user_img.png",
-                          width: 48,
-                          height: 48,
-                          fit: BoxFit.cover,
+    return SingleChildScrollView(
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .where('userID',
+            isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
+          if(snapshot.hasData){
+            return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(), //not allow to top scroll
+                shrinkWrap: true, //popup
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  UserModel userModel = UserModel.fromJson(snapshot.data!.docs[index].data() as
+                  Map<String, dynamic>);
+                  if(userModel.userName!.toLowerCase().contains(searchString.toLowerCase())) {
+                    return Container(
+                      decoration: BoxDecoration(color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        leading: ClipOval(
+                          child: userModel.image!.isNotEmpty
+                              ? CachedNetworkImage(
+                            imageUrl: userModel.image!,
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.cover,
+                          )
+                              : Image.asset("assets/images/user_img.png",
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      title: Text(userModel.userName!),
+                        title: Text(userModel.userName!),
 
-                     trailing: iconAddFriend(userModel),
-                     //  trailing: StreamBuilder<QuerySnapshot>(
-                     //   stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
-                     //       .collection('friends').snapshots(),
-                     //   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                     //     return snapshot.hasData != null ? iconAddFriend(userModel) : null;
-                     //     // return Placeholder();
-                     //   },
-                     // ),
-                    ),
-                  );
+                       trailing: iconAddFriend(userModel),
+                       //  trailing: StreamBuilder<QuerySnapshot>(
+                       //   stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+                       //       .collection('friends').snapshots(),
+                       //   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                       //     return snapshot.hasData != null ? iconAddFriend(userModel) : null;
+                       //     // return Placeholder();
+                       //   },
+                       // ),
+                      ),
+                    );
+                  }
+                  else{
+                    return const Center();
+                  }
                 }
-              }
+            );
+          }
+          return const Center(
+            child: Text('No found user'),
           );
-        }
-        return const Center(
-          child: Text('No found user'),
-        );
-      },
+        },
+      ),
     );
   }
 
