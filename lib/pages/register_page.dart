@@ -1,5 +1,6 @@
 
 import 'dart:io';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:chatonline/widget/widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -129,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 128,
                         fit: BoxFit.cover,):
                       Image.asset(
-                        'assets/images/user_img.png',
+                        ImagePath.avatar,
                         width: 128,
                         height: 128,
                         fit: BoxFit.cover,

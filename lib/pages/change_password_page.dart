@@ -45,6 +45,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       appBar: AppBar(
           title: const Text('Change Password'),
           elevation: 0,
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await savePassword();
+            },
+            child: const Text('Save', style: TextStyle(color: Colors.white, fontSize: 18),)
+          ),
+        ],
         ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -129,24 +137,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 });
               },
             ),
-            const SizedBox(height: 32,),
-            ElevatedButton(
-              onPressed: () async {
-                await savePassword();
-                
-              },
-              // ignore: prefer_const_constructors
-              child: SizedBox(
-                width: 48,
-                height: 48,
-                child: const Center(
-                    child: Text(
-                      "Save",
-                      style: TextStyle(fontSize: 16),
-                    )
-                ),
-              )
-              ),
         ]),
       ),
     

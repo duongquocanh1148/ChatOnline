@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class ConversationInfoPage extends StatelessWidget {
                             height: 64,
                             fit: BoxFit.cover,
                           ):Image.asset(
-                            'assets/images/user_img.png',
+                            ImagePath.avatar,
                             width: 64,
                             height: 64,
                             fit: BoxFit.cover,
@@ -64,7 +65,7 @@ class ConversationInfoPage extends StatelessWidget {
                                               height: 48,
                                               fit: BoxFit.cover,
                                             ):Image.asset(
-                                              'assets/images/default_user_image.png',
+                                              ImagePath.avatar,
                                               width: 48,
                                               height: 48,
                                               fit: BoxFit.cover,

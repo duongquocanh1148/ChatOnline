@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chatonline/models/user_models.dart';
 import 'package:chatonline/pages/pages.dart';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class _AccountPageState extends State<AccountPage> {
                             height: 64,
                             fit: BoxFit.cover,):
                           Image.asset(
-                            'assets/images/user_img.png',
+                            ImagePath.avatar,
                             width: 64,
                             height: 64,
                             fit: BoxFit.cover,

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatonline/models/models.dart';
+import 'package:chatonline/widget/image_path.dart';
 import 'package:chatonline/widget/widgets.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -147,7 +148,7 @@ class _AddFriendState extends State<AddFriend> {
                             height: 48,
                             fit: BoxFit.cover,
                           )
-                              : Image.asset("assets/images/user_img.png",
+                              : Image.asset(ImagePath.avatar,
                             width: 48,
                             height: 48,
                             fit: BoxFit.cover,
@@ -174,7 +175,7 @@ class _AddFriendState extends State<AddFriend> {
             );
           }
           return const Center(
-            child: Text('No found user'),
+            child: Text(''),
           );
         },
       ),
